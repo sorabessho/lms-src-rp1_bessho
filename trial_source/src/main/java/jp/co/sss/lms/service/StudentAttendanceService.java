@@ -1,6 +1,7 @@
 package jp.co.sss.lms.service;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -333,5 +334,29 @@ public class StudentAttendanceService {
 		// 完了メッセージ
 		return messageUtil.getMessage(Constants.PROP_KEY_ATTENDANCE_UPDATE_NOTICE);
 	}
-
+	
+	/**
+	 * 過去日の未入力チェック
+	 * 
+	 * @param lmsUserId
+	 * @return [未入力日が0より大きい場合]:true,そうでない場合はfalseを戻す。
+	 * @throws ParseException
+	 */
+	public boolean notEnterCheck(Integer lmsUserId) throws ParseException {
+		//今日の日付を取得
+		LocalDate today = LocalDate.now();
+		
+		//削除フラグを0に設定
+		Integer deleteFlag = 0;
+		
+		//未入力件数を取得
+		Integer notInputCount = tStudentAttendanceMapper.notEnterCount(lmsUserId, deleteFlag, today);
+		
+		//未入力件数が一件でもあったら、trueを返す
+		boolean notInputFlag = false;
+		if (notInputCount > 0) {
+			notInputFlag = true;
+		}
+		return notInputFlag;
+	}
 }
