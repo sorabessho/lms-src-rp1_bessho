@@ -86,6 +86,16 @@
 			const minutes = ('0' + today.getMinutes()).slice(-2);
 			return hours + ':' + minutes;
 		}
+		//過去日の未入力があったら警告
+		/*<![CDATA[*/
+		//AttendanceControllerで登録した未入力フラグをチェック
+		const notInputFlag = /*[[${notInputFlag}]]*/ false;
+		window.addEventListener("DOMContentLoaded", () => {
+			if (notInputFlag) {
+				alert("過去日の勤怠に未入力があります。");
+			}
+		})
+		/*]]>*/
 	</script>
 
 </body>
