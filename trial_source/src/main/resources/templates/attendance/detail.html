@@ -86,7 +86,7 @@
 			const minutes = ('0' + today.getMinutes()).slice(-2);
 			return hours + ':' + minutes;
 		}
-		//過去日の未入力があったら警告
+		//過去日の未入力チェック
 		/*<![CDATA[*/
 		//AttendanceControllerで登録した未入力フラグをチェック
 		const notInputFlag = /*[[${notInputFlag}]]*/ false;
