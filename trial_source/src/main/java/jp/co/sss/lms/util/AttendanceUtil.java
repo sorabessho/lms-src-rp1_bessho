@@ -179,5 +179,27 @@ public class AttendanceUtil {
 		return map;
 	}
 	
-
+	/**
+	 * hh:mm形式の時間を切り離し、mmに変換
+	 * 
+	 * @author 別所大空
+	 * @param time hh:mm形式の時間
+	 * @return 分解した時(hh)
+	 */
+	public String splitHourTime(String time) {
+		String[] hourTime = time.split(":");
+		return hourTime[0];
+	}
+	
+	/**
+	 * hh:mm形式の時間を切り離し、hhに変換
+	 * 
+	 * @author 別所大空
+	 * @param time hh:mm形式の時間
+	 * @return 分解した分(mm)
+	 */
+	public String splitMinutesTime(String time) {
+		String[] minutesTime = time.split(":");
+		return minutesTime[1];
+	}
 }
