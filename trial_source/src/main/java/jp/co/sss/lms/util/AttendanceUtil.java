@@ -146,5 +146,38 @@ public class AttendanceUtil {
 		}
 		return false;
 	}
+	
+	/**
+	 * 	セレクトボックス用hours取得
+	 * 
+	 * @author 別所大空
+	 * @return 0-23時間
+	 */
+	public LinkedHashMap<Integer, String> setHoursTime(){
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<Integer, String>();
+		map.put(null, "");
+		for(int i = 0; i < 24; i++) {
+			String time = i + "時間";
+			map.put(i, time);
+		}
+		return map;
+	}
+	
+	/**
+	 * セレクトボックス用minutes取得
+	 * 
+	 * @author 別所大空
+	 * @return	0-59分
+	 */
+	public LinkedHashMap<Integer, String> setMinutesTime(){
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<Integer, String>();
+		map.put(null, "");
+		for(int i = 0; i < 60; i++) {
+			String time = i + "分";
+			map.put(i, time);
+		}
+		return map;
+	}
+	
 
 }
