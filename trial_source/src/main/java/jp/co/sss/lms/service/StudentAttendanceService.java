@@ -220,6 +220,9 @@ public class StudentAttendanceService {
 		attendanceForm.setUserName(loginUserDto.getUserName());
 		attendanceForm.setLeaveFlg(loginUserDto.getLeaveFlg());
 		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
+		//追加 Task.26 別所
+		attendanceForm.setHoursTime(attendanceUtil.setHoursTime());
+		attendanceForm.setMinutesTime(attendanceUtil.setMinutesTime());
 
 		// 途中退校している場合のみ設定
 		if (loginUserDto.getLeaveDate() != null) {
