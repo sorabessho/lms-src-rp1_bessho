@@ -33,11 +33,12 @@ public class AttendanceController {
 	/**
 	 * 勤怠管理画面 初期表示
 	 * 
-	 * @param lmsUserId
-	 * @param courseId
-	 * @param model
+	 * @param lmsUserId ユーザID
+	 * @param courseId コースID
+	 * @param model	 モデル
 	 * @return 勤怠管理画面
 	 * @throws ParseException
+	 * @editer 別所大空 - Task25
 	 */
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
 	public String index(Model model) throws ParseException {

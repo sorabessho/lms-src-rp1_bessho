@@ -338,7 +338,8 @@ public class StudentAttendanceService {
 	/**
 	 * 過去日の未入力チェック
 	 * 
-	 * @param lmsUserId
+	 * @author 別所大空
+	 * @param lmsUserId ユーザID
 	 * @return [未入力日が0より大きい場合]:true,そうでない場合はfalseを戻す。
 	 * @throws ParseException
 	 */
