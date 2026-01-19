@@ -242,6 +242,16 @@ public class StudentAttendanceService {
 			dailyAttendanceForm
 					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
 			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
+			//追加 Task.26 別所大空
+			//hh:mmをUtilでhhとmmに分解し、Formに入れる
+			dailyAttendanceForm.setTrainingStartHoursTime(
+					attendanceUtil.splitHourTime(attendanceManagementDto.getTrainingStartTime()));
+			dailyAttendanceForm.setTrainingStartMinutesTime(
+					attendanceUtil.splitMinutesTime(attendanceManagementDto.getTrainingStartTime()));
+			dailyAttendanceForm.setTrainingEndHoursTime(
+					attendanceUtil.splitHourTime(attendanceManagementDto.getTrainingEndTime()));
+			dailyAttendanceForm.setTrainingEndMinutesTime(
+					attendanceUtil.splitMinutesTime(attendanceManagementDto.getTrainingEndTime()));
 			if (attendanceManagementDto.getBlankTime() != null) {
 				dailyAttendanceForm.setBlankTime(attendanceManagementDto.getBlankTime());
 				dailyAttendanceForm.setBlankTimeValue(String.valueOf(
@@ -337,7 +347,7 @@ public class StudentAttendanceService {
 		// 完了メッセージ
 		return messageUtil.getMessage(Constants.PROP_KEY_ATTENDANCE_UPDATE_NOTICE);
 	}
-	
+
 	/**
 	 * 過去日の未入力チェック
 	 * 
@@ -349,13 +359,13 @@ public class StudentAttendanceService {
 	public boolean notEnterCheck(Integer lmsUserId) throws ParseException {
 		//今日の日付を取得
 		LocalDate today = LocalDate.now();
-		
+
 		//削除フラグを0に設定
 		Integer deleteFlag = 0;
-		
+
 		//未入力件数を取得
 		Integer notInputCount = tStudentAttendanceMapper.notEnterCount(lmsUserId, deleteFlag, today);
-		
+
 		//未入力件数が一件でもあったら、trueを返す
 		boolean notInputFlag = false;
 		if (notInputCount > 0) {
