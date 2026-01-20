@@ -1,7 +1,7 @@
 package jp.co.sss.lms.service;
 
 import java.text.ParseException;
-import java.time.LocalDate;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -357,9 +357,15 @@ public class StudentAttendanceService {
 	 * @throws ParseException
 	 */
 	public boolean notEnterCheck(Integer lmsUserId) throws ParseException {
-		//今日の日付を取得
-		LocalDate today = LocalDate.now();
-
+		
+		//修正 別所
+		//フォーマットパターンを指定
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		//時間を抜いた今日の日付を取得
+		String todayStr = sdf.format(new Date());
+		Date today = sdf.parse(todayStr);
+		
 		//削除フラグを0に設定
 		Integer deleteFlag = 0;
 
