@@ -363,8 +363,7 @@ public class StudentAttendanceService {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
 		//時間を抜いた今日の日付を取得
-		String todayStr = sdf.format(new Date());
-		Date today = sdf.parse(todayStr);
+		String today = sdf.format(new Date());
 		
 		//削除フラグを0に設定
 		Integer deleteFlag = 0;
