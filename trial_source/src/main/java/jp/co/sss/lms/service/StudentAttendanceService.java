@@ -239,19 +239,25 @@ public class StudentAttendanceService {
 					.setStudentAttendanceId(attendanceManagementDto.getStudentAttendanceId());
 			dailyAttendanceForm
 					.setTrainingDate(dateUtil.toString(attendanceManagementDto.getTrainingDate()));
+
 			dailyAttendanceForm
 					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
 			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
 			//追加 Task.26 別所大空
 			//hh:mmをUtilでhhとmmに分解し、Formに入れる
-			dailyAttendanceForm.setTrainingStartHoursTime(
-					attendanceUtil.getHour(attendanceManagementDto.getTrainingStartTime()));
-			dailyAttendanceForm.setTrainingStartMinutesTime(
-					attendanceUtil.getMinute(attendanceManagementDto.getTrainingStartTime()));
-			dailyAttendanceForm.setTrainingEndHoursTime(
-					attendanceUtil.getHour(attendanceManagementDto.getTrainingEndTime()));
-			dailyAttendanceForm.setTrainingEndMinutesTime(
-					attendanceUtil.getMinute(attendanceManagementDto.getTrainingEndTime()));
+			if (attendanceManagementDto.getTrainingStartTime() == "") {
+				dailyAttendanceForm.setTrainingStartHoursTime(
+						attendanceUtil.getHour(attendanceManagementDto.getTrainingStartTime()));
+				dailyAttendanceForm.setTrainingStartMinutesTime(
+						attendanceUtil.getMinute(attendanceManagementDto.getTrainingStartTime()));
+			}
+			if (attendanceManagementDto.getTrainingEndTime() == "") {
+				dailyAttendanceForm.setTrainingEndHoursTime(
+						attendanceUtil.getHour(attendanceManagementDto.getTrainingEndTime()));
+				dailyAttendanceForm.setTrainingEndMinutesTime(
+						attendanceUtil.getMinute(attendanceManagementDto.getTrainingEndTime()));
+			}
+			
 			if (attendanceManagementDto.getBlankTime() != null) {
 				dailyAttendanceForm.setBlankTime(attendanceManagementDto.getBlankTime());
 				dailyAttendanceForm.setBlankTimeValue(String.valueOf(
