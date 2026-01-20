@@ -432,6 +432,5 @@ public class StudentAttendanceService {
 			dailyAttendanceForm.setTrainingStartTime(start);
 			dailyAttendanceForm.setTrainingEndTime(end);
 		}
-
 	}
 }
