@@ -153,7 +153,7 @@ public class AttendanceUtil {
 	 * @author 別所大空
 	 * @return 0-23時間
 	 */
-	public LinkedHashMap<Integer, String> setHoursTime(){
+	public LinkedHashMap<Integer, String> getHourMap(){
 		LinkedHashMap<Integer, String> map = new LinkedHashMap<Integer, String>();
 		map.put(null, "");
 		for(int i = 0; i < 24; i++) {
@@ -169,7 +169,7 @@ public class AttendanceUtil {
 	 * @author 別所大空
 	 * @return	0-59分
 	 */
-	public LinkedHashMap<Integer, String> setMinutesTime(){
+	public LinkedHashMap<Integer, String> getMinuteMap(){
 		LinkedHashMap<Integer, String> map = new LinkedHashMap<Integer, String>();
 		map.put(null, "");
 		for(int i = 0; i < 60; i++) {
@@ -186,9 +186,10 @@ public class AttendanceUtil {
 	 * @param time hh:mm形式の時間
 	 * @return 分解した時(hh)
 	 */
-	public String splitHourTime(String time) {
+	public Integer getHour(String time) {
 		String[] hourTime = time.split(":");
-		return hourTime[0];
+		Integer hour = Integer.parseInt(hourTime[0]);
+		return hour;
 	}
 	
 	/**
@@ -198,8 +199,9 @@ public class AttendanceUtil {
 	 * @param time hh:mm形式の時間
 	 * @return 分解した分(mm)
 	 */
-	public String splitMinutesTime(String time) {
+	public Integer getMinute(String time) {
 		String[] minutesTime = time.split(":");
-		return minutesTime[1];
+		Integer minute = Integer.parseInt(minutesTime[1]);
+		return minute;
 	}
 }

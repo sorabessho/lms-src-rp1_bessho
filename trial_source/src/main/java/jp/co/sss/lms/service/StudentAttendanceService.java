@@ -221,8 +221,8 @@ public class StudentAttendanceService {
 		attendanceForm.setLeaveFlg(loginUserDto.getLeaveFlg());
 		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
 		//追加 Task.26 別所
-		attendanceForm.setHoursTime(attendanceUtil.setHoursTime());
-		attendanceForm.setMinutesTime(attendanceUtil.setMinutesTime());
+		attendanceForm.setHoursTime(attendanceUtil.getHourMap());
+		attendanceForm.setMinutesTime(attendanceUtil.getMinuteMap());
 
 		// 途中退校している場合のみ設定
 		if (loginUserDto.getLeaveDate() != null) {
@@ -245,13 +245,13 @@ public class StudentAttendanceService {
 			//追加 Task.26 別所大空
 			//hh:mmをUtilでhhとmmに分解し、Formに入れる
 			dailyAttendanceForm.setTrainingStartHoursTime(
-					attendanceUtil.splitHourTime(attendanceManagementDto.getTrainingStartTime()));
+					attendanceUtil.getHour(attendanceManagementDto.getTrainingStartTime()));
 			dailyAttendanceForm.setTrainingStartMinutesTime(
-					attendanceUtil.splitMinutesTime(attendanceManagementDto.getTrainingStartTime()));
+					attendanceUtil.getMinute(attendanceManagementDto.getTrainingStartTime()));
 			dailyAttendanceForm.setTrainingEndHoursTime(
-					attendanceUtil.splitHourTime(attendanceManagementDto.getTrainingEndTime()));
+					attendanceUtil.getHour(attendanceManagementDto.getTrainingEndTime()));
 			dailyAttendanceForm.setTrainingEndMinutesTime(
-					attendanceUtil.splitMinutesTime(attendanceManagementDto.getTrainingEndTime()));
+					attendanceUtil.getMinute(attendanceManagementDto.getTrainingEndTime()));
 			if (attendanceManagementDto.getBlankTime() != null) {
 				dailyAttendanceForm.setBlankTime(attendanceManagementDto.getBlankTime());
 				dailyAttendanceForm.setBlankTimeValue(String.valueOf(
