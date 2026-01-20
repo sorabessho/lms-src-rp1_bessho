@@ -157,7 +157,12 @@ public class AttendanceUtil {
 		LinkedHashMap<Integer, String> map = new LinkedHashMap<Integer, String>();
 		map.put(null, "");
 		for(int i = 0; i < 24; i++) {
-			String time = i + "時間";
+			String time;
+			if (i < 10) {
+				time = "0" + i;
+			}else {
+				time = String.valueOf(i);
+			}
 			map.put(i, time);
 		}
 		return map;
@@ -173,7 +178,12 @@ public class AttendanceUtil {
 		LinkedHashMap<Integer, String> map = new LinkedHashMap<Integer, String>();
 		map.put(null, "");
 		for(int i = 0; i < 60; i++) {
-			String time = i + "分";
+			String time;
+			if (i < 10) {
+				time = "0" + i;
+			}else {
+				time = String.valueOf(i);
+			}
 			map.put(i, time);
 		}
 		return map;
