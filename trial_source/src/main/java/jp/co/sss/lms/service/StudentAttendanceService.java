@@ -221,8 +221,9 @@ public class StudentAttendanceService {
 		attendanceForm.setLeaveFlg(loginUserDto.getLeaveFlg());
 		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
 		//追加 Task.26 別所
-		attendanceForm.setHoursTime(attendanceUtil.getHourMap());
-		attendanceForm.setMinutesTime(attendanceUtil.getMinuteMap());
+		//選択肢用の時間を代入
+		attendanceForm.setHourTimes(attendanceUtil.getHourMap());
+		attendanceForm.setMinuteTimes(attendanceUtil.getMinuteMap());
 
 		// 途中退校している場合のみ設定
 		if (loginUserDto.getLeaveDate() != null) {
@@ -239,25 +240,24 @@ public class StudentAttendanceService {
 					.setStudentAttendanceId(attendanceManagementDto.getStudentAttendanceId());
 			dailyAttendanceForm
 					.setTrainingDate(dateUtil.toString(attendanceManagementDto.getTrainingDate()));
-
 			dailyAttendanceForm
 					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
 			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
+
 			//追加 Task.26 別所大空
 			//hh:mmをUtilでhhとmmに分解し、Formに入れる
-			if (attendanceManagementDto.getTrainingStartTime() == "") {
-				dailyAttendanceForm.setTrainingStartHoursTime(
+			if (!attendanceManagementDto.getTrainingStartTime().isBlank()) {
+				dailyAttendanceForm.setTrainingStartHourTime(
 						attendanceUtil.getHour(attendanceManagementDto.getTrainingStartTime()));
-				dailyAttendanceForm.setTrainingStartMinutesTime(
+				dailyAttendanceForm.setTrainingStartMinuteTime(
 						attendanceUtil.getMinute(attendanceManagementDto.getTrainingStartTime()));
 			}
-			if (attendanceManagementDto.getTrainingEndTime() == "") {
-				dailyAttendanceForm.setTrainingEndHoursTime(
+			if (!attendanceManagementDto.getTrainingEndTime().isBlank()) {
+				dailyAttendanceForm.setTrainingEndHourTime(
 						attendanceUtil.getHour(attendanceManagementDto.getTrainingEndTime()));
-				dailyAttendanceForm.setTrainingEndMinutesTime(
+				dailyAttendanceForm.setTrainingEndMinuteTime(
 						attendanceUtil.getMinute(attendanceManagementDto.getTrainingEndTime()));
 			}
-			
 			if (attendanceManagementDto.getBlankTime() != null) {
 				dailyAttendanceForm.setBlankTime(attendanceManagementDto.getBlankTime());
 				dailyAttendanceForm.setBlankTimeValue(String.valueOf(
@@ -363,14 +363,14 @@ public class StudentAttendanceService {
 	 * @throws ParseException
 	 */
 	public boolean notEnterCheck(Integer lmsUserId) throws ParseException {
-		
+
 		//修正 別所
 		//フォーマットパターンを指定
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		
+
 		//時間を抜いた今日の日付を取得
 		String today = sdf.format(new Date());
-		
+
 		//削除フラグを0に設定
 		Integer deleteFlag = 0;
 
