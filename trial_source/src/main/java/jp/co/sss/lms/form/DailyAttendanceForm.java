@@ -20,7 +20,7 @@ public class DailyAttendanceForm {
 	private String trainingStartTime;
 	/** 退勤時間 */
 	private String trainingEndTime;
-	//追加 Task.26 別所
+	//追加 別所-Task.26
 	/** 出勤時間（時） */
 	private Integer trainingStartHourTime;
 	/** 出勤時間（分） */

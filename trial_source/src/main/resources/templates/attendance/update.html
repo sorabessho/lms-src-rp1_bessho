@@ -28,9 +28,11 @@
 							<th class="w140">日付</th>
 							<th class="w300">コース内容</th>
 							<th class="w70">出勤</th>
+							<!--追加 別所-Task.26-->
 							<th></th>
 							<th class="w70"></th>
 							<th class="w70">退勤</th>
+							<!--追加 別所-Task.26-->
 							<th></th>
 							<th class="w70"></th>
 							<th class="w80">中抜け時間</th>
@@ -51,6 +53,7 @@
 								</th:block>
 								<td class="w140">[[${dailyAttendanceForm.dispTrainingDate}]]</td>
 								<td class="w300">[[${dailyAttendanceForm.sectionName}]]</td>
+								<!--修正 別所-Task.26-->
 								<!--出勤-->
 								<td class="w80">
 									<select th:name="|attendanceList[${stat.index}].trainingStartHourTime|" class="form-control">
@@ -65,10 +68,7 @@
 											th:selected="${minuteTime.key == dailyAttendanceForm.trainingStartMinuteTime}">[[${minuteTime.value}]]</option>
 									</select>
 								</td>
-<!--								<td class="w70">-->
-<!--									<input type="text" th:name="|attendanceList[${stat.index}].trainingStartTime|"-->
-<!--									th:value="${dailyAttendanceForm.trainingStartTime}" class="form-control" />-->
-<!--								</td>-->
+								<!--追加 別所-Task.26-->
 								<!--退勤-->
 								<td class="w80">
 									<select th:name="|attendanceList[${stat.index}].trainingEndHourTime|" class="form-control">
@@ -83,10 +83,6 @@
 											th:selected="${minuteTime.key == dailyAttendanceForm.trainingEndMinuteTime}">[[${minuteTime.value}]]</option>
 									</select>
 								</td>
-<!--								<td class="w70">-->
-<!--									<input type="text" th:name="|attendanceList[${stat.index}].trainingEndTime|"-->
-<!--									th:value="${dailyAttendanceForm.trainingEndTime}" class="form-control" />-->
-<!--								</td>-->
 								<!--中抜け時間-->
 								<td class="w80">
 									<select th:name="|attendanceList[${stat.index}].blankTime|" class="form-control">
@@ -112,7 +108,6 @@
 					</th:block>
 					<input type="submit" value="更新" name="complete" class="btn btn-info" />
 				</div>
-
 			</form>
 		</div>
 	</div>

@@ -208,6 +208,7 @@ public class StudentAttendanceService {
 	/**
 	 * 勤怠フォームへ設定
 	 * 
+	 * @editer 別所大空 -Task.26
 	 * @param attendanceManagementDtoList
 	 * @return 勤怠編集フォーム
 	 */
@@ -220,7 +221,7 @@ public class StudentAttendanceService {
 		attendanceForm.setUserName(loginUserDto.getUserName());
 		attendanceForm.setLeaveFlg(loginUserDto.getLeaveFlg());
 		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
-		//追加 Task.26 別所
+		//追加 別所-Task.26 
 		//選択肢用の時間を代入
 		attendanceForm.setHourTimes(attendanceUtil.getHourMap());
 		attendanceForm.setMinuteTimes(attendanceUtil.getMinuteMap());
@@ -243,7 +244,7 @@ public class StudentAttendanceService {
 			dailyAttendanceForm
 					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
 			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
-			//追加 Task.26 別所大空
+			//追加 別所大空-Task.26
 			//hh:mmをUtilでhhとmmに分解し、Formに入れる
 			if (!attendanceManagementDto.getTrainingStartTime().isBlank()
 					&& attendanceManagementDto.getTrainingStartTime() != null) {
@@ -281,6 +282,7 @@ public class StudentAttendanceService {
 	/**
 	 * 勤怠登録・更新処理
 	 * 
+	 * @editer 別所大空 -Task.26
 	 * @param attendanceForm
 	 * @return 完了メッセージ
 	 * @throws ParseException
@@ -289,6 +291,7 @@ public class StudentAttendanceService {
 		Integer lmsUserId = loginUserUtil.isStudent() ? loginUserDto.getLmsUserId()
 				: attendanceForm.getLmsUserId();
 
+		//追加 別所-Task.26
 		//出勤・退勤時間をhh:mm形式に設定
 		formatConversion(attendanceForm);
 
@@ -361,7 +364,7 @@ public class StudentAttendanceService {
 	/**
 	 * 過去日の未入力チェック
 	 * 
-	 * @author 別所大空
+	 * @author 別所大空 -Task.25
 	 * @param lmsUserId ユーザID
 	 * @return [未入力日が0より大きい場合]:true,そうでない場合はfalseを戻す。
 	 * @throws ParseException
@@ -389,6 +392,12 @@ public class StudentAttendanceService {
 		return notInputFlag;
 	}
 
+	/**
+	 * 出勤／退勤時間をhh:mm形式に設定
+	 * 
+	 * @author 別所大空 -Task.26
+	 * @param attendanceForm
+	 */
 	public void formatConversion(AttendanceForm attendanceForm) {
 		//出勤/退勤時間をhh:mm形式に設定
 		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
@@ -398,6 +407,7 @@ public class StudentAttendanceService {
 					|| dailyAttendanceForm.getTrainingStartMinuteTime() != null) {
 				//時
 				String startHour;
+				//10 == 二桁の数字
 				if (dailyAttendanceForm.getTrainingStartHourTime() < 10) {
 					startHour = String.valueOf(dailyAttendanceForm.getTrainingStartHourTime());
 					startHour = "0" + startHour;

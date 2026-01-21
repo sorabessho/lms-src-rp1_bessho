@@ -146,49 +146,49 @@ public class AttendanceUtil {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 	セレクトボックス用hours取得
 	 * 
 	 * @author 別所大空
 	 * @return 0-23時間
 	 */
-	public LinkedHashMap<Integer, String> getHourMap(){
+	public LinkedHashMap<Integer, String> getHourMap() {
 		LinkedHashMap<Integer, String> map = new LinkedHashMap<Integer, String>();
 		map.put(null, "");
-		for(int i = 0; i < 24; i++) {
+		for (int i = 0; i < 24; i++) {
 			String time;
 			if (i < 10) {
 				time = "0" + i;
-			}else {
+			} else {
 				time = String.valueOf(i);
 			}
 			map.put(i, time);
 		}
 		return map;
 	}
-	
+
 	/**
 	 * セレクトボックス用minutes取得
 	 * 
 	 * @author 別所大空
 	 * @return	0-59分
 	 */
-	public LinkedHashMap<Integer, String> getMinuteMap(){
+	public LinkedHashMap<Integer, String> getMinuteMap() {
 		LinkedHashMap<Integer, String> map = new LinkedHashMap<Integer, String>();
 		map.put(null, "");
-		for(int i = 0; i < 60; i++) {
+		for (int i = 0; i < 60; i++) {
 			String time;
 			if (i < 10) {
 				time = "0" + i;
-			}else {
+			} else {
 				time = String.valueOf(i);
 			}
 			map.put(i, time);
 		}
 		return map;
 	}
-	
+
 	/**
 	 * hh:mm形式の時間を切り離し、mmに変換
 	 * 
@@ -201,7 +201,7 @@ public class AttendanceUtil {
 		Integer hour = Integer.parseInt(hourTime[0]);
 		return hour;
 	}
-	
+
 	/**
 	 * hh:mm形式の時間を切り離し、hhに変換
 	 * 
