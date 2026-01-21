@@ -391,48 +391,54 @@ public class StudentAttendanceService {
 		//出勤/退勤時間をhh:mm形式に設定
 		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
 			//時と分をIntegerからStringへ変換
-			//出勤（時）
-			String startHour;
-			if (dailyAttendanceForm.getTrainingStartHourTime() < 10) {
-				startHour = String.valueOf(dailyAttendanceForm.getTrainingStartHourTime());
-				startHour = "0" + startHour;
-			} else {
-				startHour = String.valueOf(dailyAttendanceForm.getTrainingStartHourTime());
-			}
-			//出勤（分）
-			String startMinute;
-			if (dailyAttendanceForm.getTrainingStartMinuteTime() < 10) {
-				startMinute = String.valueOf(dailyAttendanceForm.getTrainingStartMinuteTime());
-				startMinute = "0" + startMinute;
-			} else {
-				startMinute = String.valueOf(dailyAttendanceForm.getTrainingStartMinuteTime());
-			}
-			//退勤（時）
-			String endHour;
-			if (dailyAttendanceForm.getTrainingEndHourTime() < 10) {
-				endHour = String.valueOf(dailyAttendanceForm.getTrainingEndHourTime());
-				endHour = "0" + endHour;
-			} else {
-				endHour = String.valueOf(dailyAttendanceForm.getTrainingEndHourTime());
-			}
-			//退勤(分)
-			String endMinute;
-			if (dailyAttendanceForm.getTrainingEndMinuteTime() < 10) {
-				endMinute = String.valueOf(dailyAttendanceForm.getTrainingEndMinuteTime());
-				endMinute = "0" + endMinute;
-			} else {
-				endMinute = String.valueOf(dailyAttendanceForm.getTrainingEndMinuteTime());
-			}
-
-			//hh:mm形式に変換
 			//出勤
-			String start = startHour + ":" + startMinute;
+			if (dailyAttendanceForm.getTrainingStartHourTime() != null
+					|| dailyAttendanceForm.getTrainingStartMinuteTime() != null) {
+				//時
+				String startHour;
+				if (dailyAttendanceForm.getTrainingStartHourTime() < 10) {
+					startHour = String.valueOf(dailyAttendanceForm.getTrainingStartHourTime());
+					startHour = "0" + startHour;
+				} else {
+					startHour = String.valueOf(dailyAttendanceForm.getTrainingStartHourTime());
+				}
+				//分
+				String startMinute;
+				if (dailyAttendanceForm.getTrainingStartMinuteTime() < 10) {
+					startMinute = String.valueOf(dailyAttendanceForm.getTrainingStartMinuteTime());
+					startMinute = "0" + startMinute;
+				} else {
+					startMinute = String.valueOf(dailyAttendanceForm.getTrainingStartMinuteTime());
+				}
+				//hh:mm形式に変換
+				String start = startHour + ":" + startMinute;
+				//Formに代入
+				dailyAttendanceForm.setTrainingStartTime(start);
+			}
 			//退勤
-			String end = endHour + ":" + endMinute;
-			
-			//Formに代入
-			dailyAttendanceForm.setTrainingStartTime(start);
-			dailyAttendanceForm.setTrainingEndTime(end);
+			if (dailyAttendanceForm.getTrainingEndHourTime() != null
+					|| dailyAttendanceForm.getTrainingEndMinuteTime() != null) {
+				//時
+				String endHour;
+				if (dailyAttendanceForm.getTrainingEndHourTime() < 10) {
+					endHour = String.valueOf(dailyAttendanceForm.getTrainingEndHourTime());
+					endHour = "0" + endHour;
+				} else {
+					endHour = String.valueOf(dailyAttendanceForm.getTrainingEndHourTime());
+				}
+				//分
+				String endMinute;
+				if (dailyAttendanceForm.getTrainingEndMinuteTime() < 10) {
+					endMinute = String.valueOf(dailyAttendanceForm.getTrainingEndMinuteTime());
+					endMinute = "0" + endMinute;
+				} else {
+					endMinute = String.valueOf(dailyAttendanceForm.getTrainingEndMinuteTime());
+				}
+				//hh:mm形式に変換
+				String end = endHour + ":" + endMinute;
+				//Formに代入
+				dailyAttendanceForm.setTrainingEndTime(end);
+			}
 		}
 	}
 }
