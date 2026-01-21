@@ -243,18 +243,17 @@ public class StudentAttendanceService {
 			dailyAttendanceForm
 					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
 			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
-
 			//追加 Task.26 別所大空
 			//hh:mmをUtilでhhとmmに分解し、Formに入れる
 			if (!attendanceManagementDto.getTrainingStartTime().isBlank()
-					|| attendanceManagementDto.getTrainingStartTime() != null) {
+					&& attendanceManagementDto.getTrainingStartTime() != null) {
 				dailyAttendanceForm.setTrainingStartHourTime(
 						attendanceUtil.getHour(attendanceManagementDto.getTrainingStartTime()));
 				dailyAttendanceForm.setTrainingStartMinuteTime(
 						attendanceUtil.getMinute(attendanceManagementDto.getTrainingStartTime()));
 			}
 			if (!attendanceManagementDto.getTrainingEndTime().isBlank()
-					|| attendanceManagementDto.getTrainingEndTime() != null) {
+					&& attendanceManagementDto.getTrainingEndTime() != null) {
 				dailyAttendanceForm.setTrainingEndHourTime(
 						attendanceUtil.getHour(attendanceManagementDto.getTrainingEndTime()));
 				dailyAttendanceForm.setTrainingEndMinuteTime(
