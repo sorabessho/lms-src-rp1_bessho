@@ -51,13 +51,13 @@
 								<td class="w300">[[${dailyAttendanceForm.sectionName}]]</td>
 								<!--出勤-->
 								<td class="w80">
-									<select th:name="|attendanceList[${stat.index}].trainingEndHourTime|" class="form-control">
+									<select th:name="|attendanceList[${stat.index}].trainingStartHourTime|" class="form-control">
 										<option th:each="hourTime : ${attendanceForm.hourTimes}" th:value="${hourTime.key}" th:inline="text" class="form-control"
 											th:selected="${hourTime.key == dailyAttendanceForm.trainingStartHourTime}">[[${hourTime.value}]]</option>
 									</select>
 								</td>
 								<td class="w80">
-									<select th:name="|attendanceList[${stat.index}].trainingEndMinuteTime|" class="form-control">
+									<select th:name="|attendanceList[${stat.index}].trainingStartMinuteTime|" class="form-control">
 										<option th:each="minuteTime : ${attendanceForm.minuteTimes}" th:value="${minuteTime.key}" th:inline="text" class="form-control"
 											th:selected="${minuteTime.key == dailyAttendanceForm.trainingStartMinuteTime}">[[${minuteTime.value}]]</option>
 									</select>
