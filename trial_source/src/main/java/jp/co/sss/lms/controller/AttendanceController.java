@@ -38,7 +38,6 @@ public class AttendanceController {
 	 * @param model	 モデル
 	 * @return 勤怠管理画面
 	 * @throws ParseException
-	 * @editer 別所大空 - Task25
 	 */
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
 	public String index(Model model) throws ParseException {
@@ -48,7 +47,7 @@ public class AttendanceController {
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
-		// 過去日の未入力チェック
+		// 過去日の未入力チェック 別所大空 - Task25
 		boolean notInputFlag = studentAttendanceService.notEnterCheck(loginUserDto.getLmsUserId());
 		model.addAttribute("notInputFlag", notInputFlag);
 		return "attendance/detail";
