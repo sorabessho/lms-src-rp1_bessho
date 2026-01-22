@@ -442,7 +442,7 @@ public class StudentAttendanceService {
 			}
 		}
 	}
-	
+
 	/**
 	 * 勤怠更新時の入力チェックを行う（文字数、時刻の整合性、中抜け時間の妥当性）
 	 * 
@@ -451,13 +451,41 @@ public class StudentAttendanceService {
 	 * @param result
 	 */
 	public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) {
-		//備考の最大文字数
-		Integer maxNote = 100;
-		for(DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
+		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
+			//備考の文字数が100文字以内であるかどうか
+			//備考の最大文字数
+			Integer maxNote = 100;
 			if (dailyAttendanceForm.getNote().length() > maxNote) {
-				result.rejectValue("note", "maxlength", new Object[]{"備考", "100"}, null);
+				result.rejectValue("note", "maxlength", new Object[] { "備考", "100" }, null);
 			}
-			
+			//出勤時間の(時)が入力有り＆（分）が入力なしの場合
+			if (dailyAttendanceForm.getTrainingStartHourTime() != null
+					&& dailyAttendanceForm.getTrainingStartMinuteTime() == null) {
+				
+			}
+			//出勤時間の(分)が入力有り＆（時）が入力なしの場合
+			if (dailyAttendanceForm.getTrainingStartHourTime() == null
+					&& dailyAttendanceForm.getTrainingStartMinuteTime() != null) {
+				
+			}
+			//退勤時間の(時)が入力有り＆（分）が入力なしの場合
+			if (dailyAttendanceForm.getTrainingEndHourTime() != null
+					&& dailyAttendanceForm.getTrainingEndMinuteTime() == null) {
+				
+			}
+			//退勤時間の(分)が入力有り＆（時）が入力なしの場合
+			if (dailyAttendanceForm.getTrainingEndHourTime() == null
+					&& dailyAttendanceForm.getTrainingEndMinuteTime() != null) {
+				
+			}
+			//出勤時間に入力なし＆退勤時間に入力ありの場合
+			//hh:mmの形に整形
+			formatConversion(attendanceForm);
+			if (dailyAttendanceForm.getTrainingStartTime() != null
+					&& dailyAttendanceForm.getTrainingEndTime() == null) {
+				
+			}
+			//出勤時間＞退勤時間の場合
 		}
 	}
 }
