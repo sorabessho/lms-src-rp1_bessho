@@ -378,12 +378,8 @@ public class StudentAttendanceService {
 
 		//時間を抜いた今日の日付を取得
 		String today = sdf.format(new Date());
-
-		//削除フラグを0に設定
-		Integer deleteFlag = 0;
-
 		//未入力件数を取得
-		Integer notInputCount = tStudentAttendanceMapper.notEnterCount(lmsUserId, deleteFlag, today);
+		Integer notInputCount = tStudentAttendanceMapper.notEnterCount(lmsUserId, Constants.DB_FLG_FALSE, today);
 
 		//未入力件数が一件でもあったら、trueを返す
 		boolean notInputFlag = false;
