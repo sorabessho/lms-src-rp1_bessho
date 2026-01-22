@@ -120,7 +120,7 @@
 		WHERE
 			lms_user_id = #{lmsUserId}
 			AND delete_flg = #{deleteFlg}
-			AND TO_CHAR(training_date, 'YYYY-MM-DD') &lt; #{trainingDate}
+			AND training_date &lt; #{trainingDate}
 			AND status != 1
 			AND (
 				training_start_time = ''
