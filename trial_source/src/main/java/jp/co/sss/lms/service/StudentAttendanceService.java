@@ -1,6 +1,8 @@
 package jp.co.sss.lms.service;
 
 import java.text.ParseException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -480,12 +482,28 @@ public class StudentAttendanceService {
 			}
 			//出勤時間に入力なし＆退勤時間に入力ありの場合
 			//hh:mmの形に整形
+			//もしかしたらバグる
 			formatConversion(attendanceForm);
 			if (dailyAttendanceForm.getTrainingStartTime() != null
 					&& dailyAttendanceForm.getTrainingEndTime() == null) {
 				
 			}
 			//出勤時間＞退勤時間の場合
+			//hh:mm形式をLocalTimeに変換して比較
+			DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm");
+			LocalTime startTime = LocalTime.parse(dailyAttendanceForm.getTrainingStartTime(), fmt);
+			LocalTime endTime = LocalTime.parse(dailyAttendanceForm.getTrainingEndTime(), fmt);
+			if (startTime.isBefore(endTime)) {
+				
+			}
+			//中抜け時間が勤務時間（出勤時間～退勤時間までの時間）を超える場合
+			//時間、分ごとに差分を計算して、時間を分に変換して、時間と分を合わせ、中抜け時間と比較
+			Integer hourTimeTotal = dailyAttendanceForm.getTrainingEndHourTime() - dailyAttendanceForm.getTrainingStartHourTime();
+			Integer minuteTimeTotal = dailyAttendanceForm.getTrainingEndMinuteTime() - dailyAttendanceForm.getTrainingStartMinuteTime();
+			Integer totalTime = hourTimeTotal * 60 + minuteTimeTotal;
+			if (totalTime < dailyAttendanceForm.getBlankTime()) {
+				
+			}
 		}
 	}
 }
