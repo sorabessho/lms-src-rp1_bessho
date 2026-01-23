@@ -225,7 +225,7 @@ public class AttendanceUtil {
 	 * @author 別所-Task.27
 	 * @param StartTrainingTime 開始時刻
 	 * @param EndTrainingTime 終了時刻
-	 * @return
+	 * @return TrainingTime 総受講時間
 	 */
 	public TrainingTime calcJukoTime(TrainingTime startTrainingTime, TrainingTime endTrainingTime) {
 		return new TrainingTime(endTrainingTime.getHour() - startTrainingTime.getHour()
