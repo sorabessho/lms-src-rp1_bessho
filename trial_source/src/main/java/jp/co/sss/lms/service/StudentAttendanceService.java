@@ -1,8 +1,6 @@
 package jp.co.sss.lms.service;
 
 import java.text.ParseException;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -222,9 +220,9 @@ public class StudentAttendanceService {
 		attendanceForm.setLmsUserId(loginUserDto.getLmsUserId());
 		attendanceForm.setUserName(loginUserDto.getUserName());
 		attendanceForm.setLeaveFlg(loginUserDto.getLeaveFlg());
-		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
 		//追加 別所-Task.26 
 		//選択肢用の時間を代入
+		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
 		attendanceForm.setHourTimes(attendanceUtil.getHourMap());
 		attendanceForm.setMinuteTimes(attendanceUtil.getMinuteMap());
 
@@ -453,55 +451,48 @@ public class StudentAttendanceService {
 	 */
 	public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) {
 		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
-			//備考の文字数が100文字以内であるかどうか
+			//TrainigTime型の開始時間と終了時間を用意
+			TrainingTime startTrainingTime = new TrainingTime(dailyAttendanceForm.getTrainingStartHourTime(), dailyAttendanceForm.getTrainingStartMinuteTime());
+			TrainingTime endTrainingTime = new TrainingTime(dailyAttendanceForm.getTrainingEndHourTime(), dailyAttendanceForm.getTrainingEndMinuteTime());
 			//備考の最大文字数
 			Integer maxNote = 100;
+			//備考の文字数が100文字以内であるかどうか
 			if (dailyAttendanceForm.getNote().length() > maxNote) {
 				result.rejectValue("note", "maxlength", new Object[] { "備考", "100" }, null);
 			}
 			//出勤時間の(時)が入力有り＆（分）が入力なしの場合
-			if (dailyAttendanceForm.getTrainingStartHourTime() != null
-					&& dailyAttendanceForm.getTrainingStartMinuteTime() == null) {
+			if (startTrainingTime.getHour() != null
+					&& startTrainingTime.getMinute() == null) {
 				result.rejectValue("trainingStartMinuteTime", "input.invalid",new Object[] {"出勤時間"} , null);
 			}
 			//出勤時間の(分)が入力有り＆（時）が入力なしの場合
-			if (dailyAttendanceForm.getTrainingStartHourTime() == null
-					&& dailyAttendanceForm.getTrainingStartMinuteTime() != null) {
+			if (startTrainingTime.getHour() == null
+					&& startTrainingTime.getMinute() != null) {
 				result.rejectValue("trainingStartHourTime", "input.invalid",new Object[] {"出勤時間"} , null);
 			}
 			//退勤時間の(時)が入力有り＆（分）が入力なしの場合
-			if (dailyAttendanceForm.getTrainingEndHourTime() != null
-					&& dailyAttendanceForm.getTrainingEndMinuteTime() == null) {
+			if (endTrainingTime.getHour() != null
+					&& endTrainingTime.getMinute() == null) {
 				result.rejectValue("trainingEndMinuteTime", "input.invalid",new Object[] {"退勤時間"} , null);
 			}
 			//退勤時間の(分)が入力有り＆（時）が入力なしの場合
-			if (dailyAttendanceForm.getTrainingEndHourTime() == null
-					&& dailyAttendanceForm.getTrainingEndMinuteTime() != null) {
+			if (endTrainingTime.getHour() == null
+					&& endTrainingTime.getMinute() != null) {
 				result.rejectValue("trainingEndHourTime", "input.invalid",new Object[] {"退勤時間"} , null);
 			}
 			//出勤時間に入力なし＆退勤時間に入力ありの場合
-			//hh:mmの形に整形
-			//もしかしたらバグる
-			formatConversion(attendanceForm);
-			if (dailyAttendanceForm.getTrainingStartTime() != null
-					&& dailyAttendanceForm.getTrainingEndTime() == null) {
+			if (startTrainingTime.isBlank()
+					&& !endTrainingTime.isBlank()) {
 				result.rejectValue("trainingStartTime", "attendance.punchInEmpty", null, null);
-
 			}
 			//出勤時間＞退勤時間の場合
-			//hh:mm形式をLocalTimeに変換して比較
-			DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm");
-			LocalTime startTime = LocalTime.parse(dailyAttendanceForm.getTrainingStartTime(), fmt);
-			LocalTime endTime = LocalTime.parse(dailyAttendanceForm.getTrainingEndTime(), fmt);
-			if (startTime.isBefore(endTime)) {
+			if (startTrainingTime.compareTo(endTrainingTime) == -1) {
 				result.rejectValue("trainingEndTime", "input.attendance.trainingTimeRange",new Object[] {dailyAttendanceForm} , null);
 			}
 			//中抜け時間が勤務時間（出勤時間～退勤時間までの時間）を超える場合
-			//時間、分ごとに差分を計算して、時間を分に変換して、時間と分を合わせ、中抜け時間と比較
-			Integer hourTimeTotal = dailyAttendanceForm.getTrainingEndHourTime() - dailyAttendanceForm.getTrainingStartHourTime();
-			Integer minuteTimeTotal = dailyAttendanceForm.getTrainingEndMinuteTime() - dailyAttendanceForm.getTrainingStartMinuteTime();
-			Integer totalTime = hourTimeTotal * 60 + minuteTimeTotal;
-			if (totalTime < dailyAttendanceForm.getBlankTime()) {
+			TrainingTime totalTime = attendanceUtil.calcJukoTime(startTrainingTime, endTrainingTime);
+			TrainingTime blankTime = attendanceUtil.calcBlankTime(dailyAttendanceForm.getBlankTime());
+			if (totalTime.compareTo(blankTime) == -1)  {
 				result.rejectValue("blankTime", "attendance.blankTimeError",null , null);
 			}
 		}
