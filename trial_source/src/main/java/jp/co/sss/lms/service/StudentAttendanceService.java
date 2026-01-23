@@ -463,22 +463,22 @@ public class StudentAttendanceService {
 			//出勤時間の(時)が入力有り＆（分）が入力なしの場合
 			if (dailyAttendanceForm.getTrainingStartHourTime() != null
 					&& dailyAttendanceForm.getTrainingStartMinuteTime() == null) {
-				
+				result.rejectValue("trainingStartMinuteTime", "input.invalid",new Object[] {"出勤時間"} , null);
 			}
 			//出勤時間の(分)が入力有り＆（時）が入力なしの場合
 			if (dailyAttendanceForm.getTrainingStartHourTime() == null
 					&& dailyAttendanceForm.getTrainingStartMinuteTime() != null) {
-				
+				result.rejectValue("trainingStartHourTime", "input.invalid",new Object[] {"出勤時間"} , null);
 			}
 			//退勤時間の(時)が入力有り＆（分）が入力なしの場合
 			if (dailyAttendanceForm.getTrainingEndHourTime() != null
 					&& dailyAttendanceForm.getTrainingEndMinuteTime() == null) {
-				
+				result.rejectValue("trainingEndMinuteTime", "input.invalid",new Object[] {"退勤時間"} , null);
 			}
 			//退勤時間の(分)が入力有り＆（時）が入力なしの場合
 			if (dailyAttendanceForm.getTrainingEndHourTime() == null
 					&& dailyAttendanceForm.getTrainingEndMinuteTime() != null) {
-				
+				result.rejectValue("trainingEndHourTime", "input.invalid",new Object[] {"退勤時間"} , null);
 			}
 			//出勤時間に入力なし＆退勤時間に入力ありの場合
 			//hh:mmの形に整形
@@ -486,7 +486,8 @@ public class StudentAttendanceService {
 			formatConversion(attendanceForm);
 			if (dailyAttendanceForm.getTrainingStartTime() != null
 					&& dailyAttendanceForm.getTrainingEndTime() == null) {
-				
+				result.rejectValue("trainingStartTime", "attendance.punchInEmpty", null, null);
+
 			}
 			//出勤時間＞退勤時間の場合
 			//hh:mm形式をLocalTimeに変換して比較
@@ -494,7 +495,7 @@ public class StudentAttendanceService {
 			LocalTime startTime = LocalTime.parse(dailyAttendanceForm.getTrainingStartTime(), fmt);
 			LocalTime endTime = LocalTime.parse(dailyAttendanceForm.getTrainingEndTime(), fmt);
 			if (startTime.isBefore(endTime)) {
-				
+				result.rejectValue("trainingEndTime", "input.attendance.trainingTimeRange",new Object[] {dailyAttendanceForm} , null);
 			}
 			//中抜け時間が勤務時間（出勤時間～退勤時間までの時間）を超える場合
 			//時間、分ごとに差分を計算して、時間を分に変換して、時間と分を合わせ、中抜け時間と比較
@@ -502,7 +503,7 @@ public class StudentAttendanceService {
 			Integer minuteTimeTotal = dailyAttendanceForm.getTrainingEndMinuteTime() - dailyAttendanceForm.getTrainingStartMinuteTime();
 			Integer totalTime = hourTimeTotal * 60 + minuteTimeTotal;
 			if (totalTime < dailyAttendanceForm.getBlankTime()) {
-				
+				result.rejectValue("blankTime", "attendance.blankTimeError",null , null);
 			}
 		}
 	}
