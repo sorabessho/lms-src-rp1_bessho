@@ -37,6 +37,7 @@ public class AttendanceUtil {
 	}
 
 	/**
+	 * 本日日付（yyyy/M/d形式）を取得
 	 * 時刻分を丸めた本日日付を取得
 	 * 
 	 * @return "yyyy/M/d"形式の日付
@@ -114,37 +115,17 @@ public class AttendanceUtil {
 			int hour = i / 60;
 			int minute = i % 60;
 			String time;
-
 			if (hour == 0) {
 				time = minute + "分";
-
 			} else if (minute == 0) {
 				time = hour + "時間";
 			} else {
 				time = hour + "時" + minute + "分";
 			}
-
 			map.put(i, time);
-
 			i = i + 15;
-
 		}
 		return map;
-	}
-
-	/**
-	 * 研修日の判定
-	 * 
-	 * @param courseId
-	 * @param trainingDate
-	 * @return 判定結果
-	 */
-	public boolean isWorkDay(Integer courseId, Date trainingDate) {
-		Integer count = mSectionMapper.getSectionCountByCourseId(courseId, trainingDate);
-		if (count > 0) {
-			return true;
-		}
-		return false;
 	}
 
 	/**
@@ -230,5 +211,20 @@ public class AttendanceUtil {
 	public TrainingTime calcJukoTime(TrainingTime startTrainingTime, TrainingTime endTrainingTime) {
 		return new TrainingTime(endTrainingTime.getHour() - startTrainingTime.getHour()
 				,endTrainingTime.getMinute() - startTrainingTime.getMinute());
+	}
+	
+	/**
+	 * 研修日の判定
+	 * 
+	 * @param courseId
+	 * @param trainingDate
+	 * @return 判定結果
+	 */
+	public boolean isWorkDay(Integer courseId, Date trainingDate) {
+		Integer count = mSectionMapper.getSectionCountByCourseId(courseId, trainingDate);
+		if (count > 0) {
+			return true;
+		}
+		return false;
 	}
 }
