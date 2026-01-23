@@ -24,6 +24,35 @@ public class AttendanceUtil {
 	private MSectionMapper mSectionMapper;
 
 	/**
+	 * 中抜け時間を時(hour)と分(minute)に変換
+	 *
+	 * @param min 中抜け時間
+	 * @return 時(hour)と分(minute)に変換したクラス
+	 */
+	public TrainingTime calcBlankTime(int min) {
+		int hour = min / 60;
+		int minute = min % 60;
+		TrainingTime total = new TrainingTime(hour, minute);
+		return total;
+	}
+
+	/**
+	 * 時刻分を丸めた本日日付を取得
+	 * 
+	 * @return "yyyy/M/d"形式の日付
+	 */
+	public Date getTrainingDate() {
+		Date trainingDate;
+		try {
+			trainingDate = dateUtil.parse(dateUtil.toString(new Date()));
+		} catch (ParseException e) {
+			// DateUtil#toStringとparseは同様のフォーマットを使用しているため、起こりえないエラー
+			throw new IllegalStateException();
+		}
+		return trainingDate;
+	}
+
+	/**
 	 * SSS定時・出退勤時間を元に、遅刻早退を判定をする
 	 * 
 	 * @param trainingStartTime 開始時刻
@@ -74,38 +103,9 @@ public class AttendanceUtil {
 	}
 
 	/**
-	 * 中抜け時間を時(hour)と分(minute)に変換
-	 *
-	 * @param min 中抜け時間
-	 * @return 時(hour)と分(minute)に変換したクラス
-	 */
-	public TrainingTime calcBlankTime(int min) {
-		int hour = min / 60;
-		int minute = min % 60;
-		TrainingTime total = new TrainingTime(hour, minute);
-		return total;
-	}
-
-	/**
-	 * 時刻分を丸めた本日日付を取得
+	 * 中抜け時間のプルダウンマップを作成
 	 * 
-	 * @return "yyyy/M/d"形式の日付
-	 */
-	public Date getTrainingDate() {
-		Date trainingDate;
-		try {
-			trainingDate = dateUtil.parse(dateUtil.toString(new Date()));
-		} catch (ParseException e) {
-			// DateUtil#toStringとparseは同様のフォーマットを使用しているため、起こりえないエラー
-			throw new IllegalStateException();
-		}
-		return trainingDate;
-	}
-
-	/**
-	 * 休憩時間取得
-	 * 
-	 * @return 休憩時間
+	 * @return 15分刻みの時間 15分-7時間45分
 	 */
 	public LinkedHashMap<Integer, String> setBlankTime() {
 		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
@@ -148,8 +148,8 @@ public class AttendanceUtil {
 	}
 
 	/**
-	 * 	セレクトボックス用hours取得
-	 *  時間のプルダウンマップを生成
+	 * 時間のプルダウンマップを生成
+	 * セレクトボックス用hours取得
 	 *  
 	 * @author 別所大空-Task.26
 	 * @return 0-23時間
@@ -170,8 +170,8 @@ public class AttendanceUtil {
 	}
 
 	/**
-	 * セレクトボックス用minutes取得
 	 * 分のプルダウンマップを生成
+	 * セレクトボックス用minutes取得
 	 * 
 	 * @author 別所大空-Task.26
 	 * @return	0-59分
@@ -192,6 +192,7 @@ public class AttendanceUtil {
 	}
 
 	/**
+	 * 時間(時)の切り出し
 	 * hh:mm形式の時間を切り離し、mmに変換
 	 * 
 	 * @author 別所大空-Task.26
@@ -205,6 +206,7 @@ public class AttendanceUtil {
 	}
 
 	/**
+	 * 時間(分)の切り出し
 	 * hh:mm形式の時間を切り離し、hhに変換
 	 * 
 	 * @author 別所大空-Task.26
@@ -215,5 +217,18 @@ public class AttendanceUtil {
 		String[] minutesTime = time.split(":");
 		Integer minute = Integer.parseInt(minutesTime[1]);
 		return minute;
+	}
+
+	/**
+	 * 総受講時間を算出
+	 * 
+	 * @author 別所-Task.27
+	 * @param StartTrainingTime 開始時刻
+	 * @param EndTrainingTime 終了時刻
+	 * @return
+	 */
+	public TrainingTime calcJukoTime(TrainingTime startTrainingTime, TrainingTime endTrainingTime) {
+		return new TrainingTime(endTrainingTime.getHour() - startTrainingTime.getHour()
+				,endTrainingTime.getMinute() - startTrainingTime.getMinute());
 	}
 }
