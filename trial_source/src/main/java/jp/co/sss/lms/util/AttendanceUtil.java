@@ -149,8 +149,9 @@ public class AttendanceUtil {
 
 	/**
 	 * 	セレクトボックス用hours取得
-	 * 
-	 * @author 別所大空
+	 *  時間のプルダウンマップを生成
+	 *  
+	 * @author 別所大空-Task.26
 	 * @return 0-23時間
 	 */
 	public LinkedHashMap<Integer, String> getHourMap() {
@@ -170,8 +171,9 @@ public class AttendanceUtil {
 
 	/**
 	 * セレクトボックス用minutes取得
+	 * 分のプルダウンマップを生成
 	 * 
-	 * @author 別所大空
+	 * @author 別所大空-Task.26
 	 * @return	0-59分
 	 */
 	public LinkedHashMap<Integer, String> getMinuteMap() {
@@ -192,7 +194,7 @@ public class AttendanceUtil {
 	/**
 	 * hh:mm形式の時間を切り離し、mmに変換
 	 * 
-	 * @author 別所大空
+	 * @author 別所大空-Task.26
 	 * @param time hh:mm形式の時間
 	 * @return 分解した時(hh)
 	 */
@@ -205,7 +207,7 @@ public class AttendanceUtil {
 	/**
 	 * hh:mm形式の時間を切り離し、hhに変換
 	 * 
-	 * @author 別所大空
+	 * @author 別所大空-Task.26
 	 * @param time hh:mm形式の時間
 	 * @return 分解した分(mm)
 	 */
