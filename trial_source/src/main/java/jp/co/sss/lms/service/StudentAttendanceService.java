@@ -373,10 +373,9 @@ public class StudentAttendanceService {
 	 */
 	public boolean notEnterCheck(Integer lmsUserId) throws ParseException {
 
-		//修正 別所
-		//フォーマットパターンを指定
-		String todayStr = dateUtil.toString(new Date());
-		Date today = dateUtil.parse(todayStr);
+		//修正 別所-Task.25
+		//時分秒を丸めたDateを取得
+		Date today = attendanceUtil.getTrainingDate();
 		//未入力件数を取得
 		Integer notInputCount = tStudentAttendanceMapper.notEnterCount(lmsUserId, Constants.DB_FLG_FALSE, today);
 		//未入力件数が一件でもあったら、trueを返す
