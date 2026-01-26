@@ -451,50 +451,61 @@ public class StudentAttendanceService {
 	 */
 	public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) {
 		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
-			//TrainigTime型の開始時間と終了時間を用意
-			TrainingTime startTrainingTime = new TrainingTime(dailyAttendanceForm.getTrainingStartHourTime(), dailyAttendanceForm.getTrainingStartMinuteTime());
-			TrainingTime endTrainingTime = new TrainingTime(dailyAttendanceForm.getTrainingEndHourTime(), dailyAttendanceForm.getTrainingEndMinuteTime());
+			//TrainigTime型の開始時間と終了時間を用意}
+//			TrainingTime startTrainingTime = new TrainingTime(dailyAttendanceForm.getTrainingStartHourTime(), dailyAttendanceForm.getTrainingStartMinuteTime());
+//			TrainingTime endTrainingTime = new TrainingTime(dailyAttendanceForm.getTrainingEndHourTime(), dailyAttendanceForm.getTrainingEndMinuteTime());
+			TrainingTime startTrainingTime = new TrainingTime();
+			startTrainingTime.setHour(dailyAttendanceForm.getTrainingStartHourTime());
+			startTrainingTime.setMinute(dailyAttendanceForm.getTrainingStartMinuteTime());
+			TrainingTime endTrainingTime = new TrainingTime();
+			endTrainingTime.setHour(dailyAttendanceForm.getTrainingEndHourTime());
+			endTrainingTime.setMinute(dailyAttendanceForm.getTrainingEndMinuteTime());
 			//備考の最大文字数
 			Integer maxNote = 100;
 			//備考の文字数が100文字以内であるかどうか
 			if (dailyAttendanceForm.getNote().length() > maxNote) {
-				result.rejectValue("note", "maxlength", new Object[] { "備考", "100" }, null);
+				result.reject("maxlength", new Object[] { "備考", "100" }, null);
 			}
 			//出勤時間の(時)が入力有り＆（分）が入力なしの場合
 			if (startTrainingTime.getHour() != null
 					&& startTrainingTime.getMinute() == null) {
-				result.rejectValue("trainingStartMinuteTime", "input.invalid",new Object[] {"出勤時間"} , null);
+				result.reject("input.invalid",new Object[] {"出勤時間"} , null);
 			}
 			//出勤時間の(分)が入力有り＆（時）が入力なしの場合
 			if (startTrainingTime.getHour() == null
 					&& startTrainingTime.getMinute() != null) {
-				result.rejectValue("trainingStartHourTime", "input.invalid",new Object[] {"出勤時間"} , null);
+				result.reject("input.invalid",new Object[] {"出勤時間"} , null);
 			}
 			//退勤時間の(時)が入力有り＆（分）が入力なしの場合
 			if (endTrainingTime.getHour() != null
 					&& endTrainingTime.getMinute() == null) {
-				result.rejectValue("trainingEndMinuteTime", "input.invalid",new Object[] {"退勤時間"} , null);
+				result.reject("input.invalid",new Object[] {"退勤時間"} , null);
 			}
 			//退勤時間の(分)が入力有り＆（時）が入力なしの場合
 			if (endTrainingTime.getHour() == null
 					&& endTrainingTime.getMinute() != null) {
-				result.rejectValue("trainingEndHourTime", "input.invalid",new Object[] {"退勤時間"} , null);
+				result.reject("input.invalid",new Object[] {"退勤時間"} , null);
 			}
 			//出勤時間に入力なし＆退勤時間に入力ありの場合
 			if (startTrainingTime.isBlank()
 					&& !endTrainingTime.isBlank()) {
-				result.rejectValue("trainingStartTime", "attendance.punchInEmpty", null, null);
+				result.reject("attendance.punchInEmpty", null, null);
 			}
 			//出勤時間＞退勤時間の場合
 			if (startTrainingTime.compareTo(endTrainingTime) == -1) {
-				result.rejectValue("trainingEndTime", "input.attendance.trainingTimeRange",new Object[] {dailyAttendanceForm} , null);
+				result.reject("attendance.trainingTimeRange",new Object[] {dailyAttendanceForm} , null);
 			}
 			//中抜け時間が勤務時間（出勤時間～退勤時間までの時間）を超える場合
-			TrainingTime totalTime = attendanceUtil.calcJukoTime(startTrainingTime, endTrainingTime);
-			TrainingTime blankTime = attendanceUtil.calcBlankTime(dailyAttendanceForm.getBlankTime());
-			if (totalTime.compareTo(blankTime) == -1)  {
-				result.rejectValue("blankTime", "attendance.blankTimeError",null , null);
+			if (dailyAttendanceForm.getBlankTime() != null 
+					&& !startTrainingTime.isBlank()
+					&& !endTrainingTime.isBlank()) {
+				TrainingTime totalTime = attendanceUtil.calcJukoTime(startTrainingTime, endTrainingTime);
+				TrainingTime blankTime = attendanceUtil.calcBlankTime(dailyAttendanceForm.getBlankTime());
+				if (totalTime.compareTo(blankTime) == -1)  {
+					result.reject("attendance.blankTimeError",null , null);
+				}
 			}
+			
 		}
 	}
 }
