@@ -450,6 +450,8 @@ public class StudentAttendanceService {
 	 * @param result
 	 */
 	public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) {
+		//リストの番号用の変数
+		int index = 0;
 		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
 			//引数ありのコンストラクタだとnullを許容しないので、setterを使用してTrainingTimeにセット
 			TrainingTime startTrainingTime = new TrainingTime();
@@ -462,42 +464,42 @@ public class StudentAttendanceService {
 			Integer maxNote = 100;
 			//備考の文字数が100文字以内であるかどうか
 			if (dailyAttendanceForm.getNote().length() > maxNote) {
-				result.reject("maxlength", new Object[] { "備考", "100" }, null);
+				result.rejectValue("attendanceList[" + index + "].note", "maxlength", new Object[] { "備考", "100" }, null);
 				//デバッグ
 				System.out.println("備考の文字数が多いよ！！");
 			}
 			//出勤時間の(時)が入力有り＆（分）が入力なしの場合
 			if (startTrainingTime.getHour() != null
 					&& startTrainingTime.getMinute() == null) {
-				result.reject("input.invalid", new Object[] { "出勤時間" }, null);
+				result.rejectValue("attendanceList[" + index + "].trainingStartMinuteTime", "input.invalid", new Object[] { "出勤時間" }, null);
 				//デバッグ
 				System.out.println("出勤時間の分がはいってないよ！！");
 			}
 			//出勤時間の(分)が入力有り＆（時）が入力なしの場合
 			if (startTrainingTime.getHour() == null
 					&& startTrainingTime.getMinute() != null) {
-				result.reject("input.invalid", new Object[] { "出勤時間" }, null);
+				result.rejectValue("attendanceList[" + index + "].trainingStartHourTime", "input.invalid", new Object[] { "出勤時間" }, null);
 				//デバッグ
 				System.out.println("出勤時間の時間がはいってないよ！！");
 			}
 			//退勤時間の(時)が入力有り＆（分）が入力なしの場合
 			if (endTrainingTime.getHour() != null
 					&& endTrainingTime.getMinute() == null) {
-				result.reject("input.invalid", new Object[] { "退勤時間" }, null);
+				result.rejectValue("attendanceList[" + index + "].trainingEndMinuteTime", "input.invalid", new Object[] { "退勤時間" }, null);
 				//デバッグ
 				System.out.println("退勤時間の分がはいってないよ！！");
 			}
 			//退勤時間の(分)が入力有り＆（時）が入力なしの場合
 			if (endTrainingTime.getHour() == null
 					&& endTrainingTime.getMinute() != null) {
-				result.reject("input.invalid", new Object[] { "退勤時間" }, null);
+				result.rejectValue("attendanceList[" + index + "].trainingEndHourTime", "input.invalid", new Object[] { "退勤時間" }, null);
 				//デバッグ
 				System.out.println("退勤時間の時間がはいってないよ！！");
 			}
 			//出勤時間に入力なし＆退勤時間に入力ありの場合
 			if (startTrainingTime.isBlank()
 					&& !endTrainingTime.isBlank()) {
-				result.reject("attendance.punchInEmpty", null, null);
+				result.rejectValue("attendanceList[" + index + "].trainingStartTime", "attendance.punchInEmpty", null, null);
 				//デバッグ
 				System.out.println("退勤してるのに出勤時間がはいってないよ！！");
 			}
@@ -506,7 +508,7 @@ public class StudentAttendanceService {
 				//退勤時間の一方どちらかがはいってなかったら、上のエラーと合わせてエラーが起きてしまうため、下のif文を追加
 				if (endTrainingTime.getHour() != null
 						&& endTrainingTime.getMinute() != null) {
-					result.reject("attendance.trainingTimeRange", new Object[] { dailyAttendanceForm }, null);
+					result.rejectValue("attendanceList[" + index + "].trainingEndTime", "attendance.trainingTimeRange", new Object[] { dailyAttendanceForm }, null);
 					//デバッグ
 					System.out.println("退勤した後に出勤してるよ！！");
 				}
@@ -518,11 +520,12 @@ public class StudentAttendanceService {
 				TrainingTime totalTime = attendanceUtil.calcJukoTime(startTrainingTime, endTrainingTime);
 				TrainingTime blankTime = attendanceUtil.calcBlankTime(dailyAttendanceForm.getBlankTime());
 				if (totalTime.compareTo(blankTime) == -1) {
-					result.reject("attendance.blankTimeError", null, null);
+					result.rejectValue("attendanceList[" + index + "].blankTime", "attendance.blankTimeError", null, null);
 					//デバッグ
 					System.out.println("中抜け時間が多いよ！！");
 				}
 			}
+			index++;
 		}
 	}
 }
