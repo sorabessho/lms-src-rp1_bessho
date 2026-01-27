@@ -23,7 +23,7 @@
 	<div th:object="${attendanceForm}">
 		<ul style="padding-left:0;list-style:none;" th:if="${#fields.hasGlobalErrors()}">
 			<div th:each="error:${#fields.globalErrors()}">
-				<li><span class="help-inline error" th:text="${error}">*&nbsp;</span></li>
+				<li class="help-inline error">*&nbsp;<span  th:text="${error}"></span></li>
 			</div>
 		</ul>
 	</div>
