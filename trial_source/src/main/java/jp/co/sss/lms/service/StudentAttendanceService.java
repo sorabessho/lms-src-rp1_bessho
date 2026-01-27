@@ -44,6 +44,8 @@ public class StudentAttendanceService {
 	private LoginUserDto loginUserDto;
 	@Autowired
 	private TStudentAttendanceMapper tStudentAttendanceMapper;
+	@Autowired
+	private TrainingTime trainingTime;
 
 	/**
 	 * 勤怠一覧情報取得
@@ -445,7 +447,7 @@ public class StudentAttendanceService {
 	/**
 	 * 勤怠更新時の入力チェックを行う（文字数、時刻の整合性、中抜け時間の妥当性）
 	 * 
-	 * @author 別所大空
+	 * @author 別所大空-Task.27
 	 * @param attendanceForm
 	 * @param result
 	 */
@@ -530,28 +532,28 @@ public class StudentAttendanceService {
 		}
 		//エラーがあった所のみに一つだけグローバルエラーを設定
 		if (isNoteError) {
-			result.reject("maxlength", new Object[] { "備考", "100" }, null);
+			result.reject(Constants.VALID_KEY_MAXLENGTH, new Object[] { "備考", "100" }, null);
 		}
 		if (isTrainingStartMinuteTime) {
-			result.reject("input.invalid", new Object[] { "出勤時間" }, null);
+			result.reject(Constants.INPUT_INVALID, new Object[] { "出勤時間" }, null);
 		}
 		if (isTrainingStartHourTime) {
-			result.reject("input.invalid", new Object[] { "出勤時間" }, null);
+			result.reject(Constants.INPUT_INVALID, new Object[] { "出勤時間" }, null);
 		}
 		if (isTrainingEndMinuteTime) {
-			result.reject("input.invalid", new Object[] { "退勤時間" }, null);
+			result.reject(Constants.INPUT_INVALID, new Object[] { "退勤時間" }, null);
 		}
 		if (isTrainingEndHourTime) {
-			result.reject("input.invalid", new Object[] { "退勤時間" }, null);
+			result.reject(Constants.INPUT_INVALID, new Object[] { "退勤時間" }, null);
 		}
 		if (isTrainingStartTime) {
-			result.reject("attendance.punchInEmpty", null, null);
+			result.reject(Constants.VALID_KEY_ATTENDANCE_PUNCHINEMPTY, null, null);
 		}
 		if (isTrainingEndTime) {
-			result.reject("attendance.trainingTimeRange", new Object[] { index }, null);
+			result.reject(Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE, new Object[] { index }, null);
 		}
 		if (isBlankTime) {
-			result.reject("attendance.blankTimeError", null, null);
+			result.reject(Constants.VALID_KEY_ATTENDANCE_BLANKTIMEERROR, null, null);
 		}
 	}
 }

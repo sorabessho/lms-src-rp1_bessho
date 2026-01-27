@@ -209,10 +209,10 @@ public class AttendanceUtil {
 	 * @return TrainingTime 総受講時間
 	 */
 	public TrainingTime calcJukoTime(TrainingTime startTrainingTime, TrainingTime endTrainingTime) {
-		return new TrainingTime(endTrainingTime.getHour() - startTrainingTime.getHour()
-				,endTrainingTime.getMinute() - startTrainingTime.getMinute());
+		return new TrainingTime(endTrainingTime.getHour() - startTrainingTime.getHour(),
+				endTrainingTime.getMinute() - startTrainingTime.getMinute());
 	}
-	
+
 	/**
 	 * 研修日の判定
 	 * 
