@@ -163,9 +163,7 @@
 			var comfirmBtn = document.getElementById('confirmBtn');
 			comfirmBtn.addEventListener('click', function () {
 				var checkResult = window.confirm('更新します。よろしいですか？')
-				if (checkResult) {
-
-				} else {
+				if (!checkResult) {
 					event.preventDefault();
 				}
 			});
