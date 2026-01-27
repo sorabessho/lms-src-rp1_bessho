@@ -44,8 +44,6 @@ public class StudentAttendanceService {
 	private LoginUserDto loginUserDto;
 	@Autowired
 	private TStudentAttendanceMapper tStudentAttendanceMapper;
-	@Autowired
-	private TrainingTime trainingTime;
 
 	/**
 	 * 勤怠一覧情報取得
