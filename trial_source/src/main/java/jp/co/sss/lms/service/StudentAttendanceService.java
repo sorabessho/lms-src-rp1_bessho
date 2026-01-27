@@ -471,6 +471,8 @@ public class StudentAttendanceService {
 			endTrainingTime.setMinute(dailyAttendanceForm.getTrainingEndMinuteTime());
 			//備考の最大文字数
 			Integer maxNote = 100;
+			//出勤時間の一方がかけていた場合、「出勤時間に入力なし＆退勤時間に入力ありの場合」のエラーを二重に出さないための変数
+			boolean isStartTimeError = false;
 			//備考の文字数が100文字以内であるかどうか
 			if (dailyAttendanceForm.getNote().length() > maxNote) {
 				result.rejectValue("attendanceList[" + index + "].note", null);
@@ -481,12 +483,14 @@ public class StudentAttendanceService {
 					&& startTrainingTime.getMinute() == null) {
 				result.rejectValue("attendanceList[" + index + "].trainingStartMinuteTime", null);
 				isTrainingStartMinuteTime = true;
+				isStartTimeError = true;
 			}
 			//出勤時間の(分)が入力有り＆（時）が入力なしの場合
 			if (startTrainingTime.getHour() == null
 					&& startTrainingTime.getMinute() != null) {
 				result.rejectValue("attendanceList[" + index + "].trainingStartHourTime", null);
 				isTrainingStartHourTime = true;
+				isStartTimeError = true;
 			}
 			//退勤時間の(時)が入力有り＆（分）が入力なしの場合
 			if (endTrainingTime.getHour() != null
@@ -502,7 +506,8 @@ public class StudentAttendanceService {
 			}
 			//出勤時間に入力なし＆退勤時間に入力ありの場合
 			if (startTrainingTime.isBlank()
-					&& !endTrainingTime.isBlank()) {
+					&& !endTrainingTime.isBlank()
+					&& !isStartTimeError) {
 				result.rejectValue("attendanceList[" + index + "].trainingStartTime", null);
 				isTrainingStartTime = true;
 			}
