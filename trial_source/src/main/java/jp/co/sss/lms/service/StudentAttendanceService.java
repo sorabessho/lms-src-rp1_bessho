@@ -459,7 +459,6 @@ public class StudentAttendanceService {
 		boolean isTrainingEndMinuteTime = false;
 		boolean isTrainingEndHourTime = false;
 		boolean isTrainingStartTime = false;
-		boolean isTrainingEndTime = false;
 		boolean isBlankTime = false;
 		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
 			//引数ありのコンストラクタだとnullを許容しないので、setterを使用してTrainingTimeにセット
@@ -517,7 +516,7 @@ public class StudentAttendanceService {
 				if (endTrainingTime.getHour() != null
 						&& endTrainingTime.getMinute() != null) {
 					result.rejectValue("attendanceList[" + index + "].trainingEndTime", null);
-					isTrainingEndTime = true;
+					result.reject(Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE, new Object[] { index }, null);
 				}
 			}
 			//中抜け時間が勤務時間（出勤時間～退勤時間までの時間）を超える場合
@@ -551,9 +550,6 @@ public class StudentAttendanceService {
 		}
 		if (isTrainingStartTime) {
 			result.reject(Constants.VALID_KEY_ATTENDANCE_PUNCHINEMPTY, null, null);
-		}
-		if (isTrainingEndTime) {
-			result.reject(Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE, new Object[] { index }, null);
 		}
 		if (isBlankTime) {
 			result.reject(Constants.VALID_KEY_ATTENDANCE_BLANKTIMEERROR, null, null);
