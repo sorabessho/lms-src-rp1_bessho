@@ -35,18 +35,14 @@
 					<thead>
 						<tr>
 							<th class="w140">日付</th>
-							<th class="w300">コース内容</th>
-							<th class="w70">出勤</th>
-							<!--追加 別所-Task.26-->
-							<th></th>
-							<th class="w70"></th>
-							<th class="w70">退勤</th>
-							<!--追加 別所-Task.26-->
-							<th></th>
-							<th class="w70"></th>
+							<th class="w140">コース内容</th>
+							<!--定時用空白 別所-Task.28-->
+							<th class="w60"></th>
+							<th class="w180" colspan="3">出勤</th>
+							<th class="w180" colspan="3">退勤</th>
 							<th class="w80">中抜け時間</th>
 							<th class="w70">ステータス</th>
-							<th class="w240">備考</th>
+							<th class="w140">備考</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -67,10 +63,14 @@
 										th:value="${dailyAttendanceForm.statusDispName}" />
 								</th:block>
 								<td class="w140">[[${dailyAttendanceForm.dispTrainingDate}]]</td>
-								<td class="w300">[[${dailyAttendanceForm.sectionName}]]</td>
+								<td class="w140">[[${dailyAttendanceForm.sectionName}]]</td>
+								<!--定時ボタン 別所-Task.28-->
+								<td class="w60">
+									<input type="button" class="btn btn-success" value="定時">
+								</td>
 								<!--修正 別所-Task.26-->
 								<!--出勤-->
-								<td class="w80">
+								<td>
 									<!--エラーの強調表示 別所-Task.27-->
 									<select th:name="|attendanceList[${stat.index}].trainingStartHourTime|"
 										class="form-control"
@@ -83,7 +83,7 @@
 									</select>
 								</td>
 								<td>:</td>
-								<td class="w80">
+								<td>
 									<!--エラーの強調表示 別所-Task.27-->
 									<select th:name="|attendanceList[${stat.index}].trainingStartMinuteTime|"
 										class="form-control"
@@ -97,7 +97,7 @@
 								</td>
 								<!--追加 別所-Task.26-->
 								<!--退勤-->
-								<td class="w80">
+								<td>
 									<!--エラーの強調表示 別所-Task.27-->
 									<select th:name="|attendanceList[${stat.index}].trainingEndHourTime|"
 										class="form-control"
@@ -110,7 +110,7 @@
 									</select>
 								</td>
 								<td>:</td>
-								<td class="w80">
+								<td>
 									<!--エラーの強調表示 別所-Task.27-->
 									<select th:name="|attendanceList[${stat.index}].trainingEndMinuteTime|"
 										class="form-control"
@@ -123,7 +123,7 @@
 									</select>
 								</td>
 								<!--中抜け時間-->
-								<td class="w80">
+								<td>
 									<!--エラーの強調表示 別所-Task.27-->
 									<select th:name="|attendanceList[${stat.index}].blankTime|" class="form-control"
 										th:classappend="${#fields.hasErrors('attendanceForm.attendanceList[' + stat.index + '].blankTime')} ? 'errorInput' : ''">
@@ -134,7 +134,7 @@
 									</select>
 								</td>
 								<td class="w70">[[${dailyAttendanceForm.statusDispName}]]</td>
-								<td class="w240">
+								<td class="w140">
 									<!--エラーの強調表示 別所-Task.27-->
 									<input type="text" th:name="|attendanceList[${stat.index}].note|"
 										th:value="${dailyAttendanceForm.note}" class="form-control"
@@ -167,6 +167,39 @@
 					event.preventDefault();
 				}
 			});
+		</script>
+		
+		<!--定時機能 別所-Task.27-->
+		<script>
+			//画面全体のクリックを監視
+			document.addEventListener("click",(event)=>{
+				//クリックされたモノが定時ボタンかチェック 定時ボタンではなかったら終了
+				const regularTimeBtn = event.target.closest(".btn-success");
+				if(!regularTimeBtn) return;
+				
+				//押された定時ボタンの列を取得
+				const row = event.target.closest("tr");
+				//万が一要素が取れなかったら終了
+				if(!row) return;
+				
+				//出勤時間、退勤時間のselect属性を取得
+				const startHour = row.querySelector("select[name$='trainingStartHourTime']");
+				const startMinute = row.querySelector("select[name$='trainingStartMinuteTime']");
+				const endHour = row.querySelector("select[name$='trainingEndHourTime']");
+				const endMinute = row.querySelector("select[name$='trainingEndMinuteTime']");
+				
+				//valueに定時を詰める if文はnull対策
+				if(startHour) startHour.value = "9";
+				if(startMinute) startMinute.value = "0";
+				if(endHour) endHour.value = "18";
+				if(endMinute) endMinute.value = "0";
+				
+				//値を変えたことをhtmlに通知
+				startHour?.dispatchEvent(new Event("change",{ bubbles : true }));
+				startMinute?.dispatchEvent(new Event("change",{ bubbles : true }));
+				endHour?.dispatchEvent(new Event("change",{ bubbles : true }));
+				endMinute?.dispatchEvent(new Event("change",{ bubbles : true }));
+			})
 		</script>
 </body>
 
