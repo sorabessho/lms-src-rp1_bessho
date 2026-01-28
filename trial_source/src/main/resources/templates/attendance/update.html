@@ -23,7 +23,7 @@
 	<div th:object="${attendanceForm}">
 		<ul style="padding-left:0;list-style:none;" th:if="${#fields.hasGlobalErrors()}">
 			<div th:each="error:${#fields.globalErrors()}">
-				<li class="help-inline error">*&nbsp;<span  th:text="${error}"></span></li>
+				<li class="help-inline error">*&nbsp;<span th:text="${error}"></span></li>
 			</div>
 		</ul>
 	</div>
@@ -32,7 +32,7 @@
 
 			<form th:action="@{/attendance/update}" method="post">
 				<table class="table table-hover dataTable no-footer">
-					<thead>
+					<thead style="display: block;">
 						<tr>
 							<th class="w140">日付</th>
 							<th class="w140">コース内容</th>
@@ -45,7 +45,7 @@
 							<th class="w140">備考</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody style="display: block; overflow-y: scroll; height: 560px;">
 						<th:block th:each="dailyAttendanceForm, stat : *{attendanceForm.attendanceList}">
 							<tr>
 								<th:block>
@@ -62,6 +62,7 @@
 									<input type="hidden" th:name="|attendanceList[${stat.index}].statusDispName|"
 										th:value="${dailyAttendanceForm.statusDispName}" />
 								</th:block>
+
 								<td class="w140">[[${dailyAttendanceForm.dispTrainingDate}]]</td>
 								<td class="w140">[[${dailyAttendanceForm.sectionName}]]</td>
 								<!--定時ボタン 別所-Task.28-->
@@ -75,7 +76,7 @@
 									<select th:name="|attendanceList[${stat.index}].trainingStartHourTime|"
 										class="form-control"
 										th:classappend="${#fields.hasErrors('attendanceForm.attendanceList[' + stat.index + '].trainingStartHourTime')
-															or #fields.hasErrors('attendanceForm.attendanceList[' + stat.index + '].trainingStartTime')} ? 'errorInput' : ''">
+																or #fields.hasErrors('attendanceForm.attendanceList[' + stat.index + '].trainingStartTime')} ? 'errorInput' : ''">
 										<option th:each="hourTime : ${attendanceForm.hourTimes}"
 											th:value="${hourTime.key}" th:inline="text" class="form-control"
 											th:selected="${hourTime.key == dailyAttendanceForm.trainingStartHourTime}">
@@ -88,7 +89,7 @@
 									<select th:name="|attendanceList[${stat.index}].trainingStartMinuteTime|"
 										class="form-control"
 										th:classappend="${#fields.hasErrors('attendanceForm.attendanceList[' + stat.index + '].trainingStartMinuteTime')
-															or #fields.hasErrors('attendanceForm.attendanceList[' + stat.index + '].trainingStartTime')} ? 'errorInput' : ''">
+																or #fields.hasErrors('attendanceForm.attendanceList[' + stat.index + '].trainingStartTime')} ? 'errorInput' : ''">
 										<option th:each="minuteTime : ${attendanceForm.minuteTimes}"
 											th:value="${minuteTime.key}" th:inline="text" class="form-control"
 											th:selected="${minuteTime.key == dailyAttendanceForm.trainingStartMinuteTime}">
@@ -102,7 +103,7 @@
 									<select th:name="|attendanceList[${stat.index}].trainingEndHourTime|"
 										class="form-control"
 										th:classappend="${#fields.hasErrors('attendanceForm.attendanceList[' + stat.index + '].trainingEndHourTime')
-															or #fields.hasErrors('attendanceForm.attendanceList[' + stat.index + '].trainingEndTime')} ? 'errorInput' : ''">
+																or #fields.hasErrors('attendanceForm.attendanceList[' + stat.index + '].trainingEndTime')} ? 'errorInput' : ''">
 										<option th:each="hourTime : ${attendanceForm.hourTimes}"
 											th:value="${hourTime.key}" th:inline="text" class="form-control"
 											th:selected="${hourTime.key == dailyAttendanceForm.trainingEndHourTime}">
@@ -115,7 +116,7 @@
 									<select th:name="|attendanceList[${stat.index}].trainingEndMinuteTime|"
 										class="form-control"
 										th:classappend="${#fields.hasErrors('attendanceForm.attendanceList[' + stat.index + '].trainingEndMinuteTime')
-															or #fields.hasErrors('attendanceForm.attendanceList[' + stat.index + '].trainingEndTime')} ? 'errorInput' : ''">
+																or #fields.hasErrors('attendanceForm.attendanceList[' + stat.index + '].trainingEndTime')} ? 'errorInput' : ''">
 										<option th:each="minuteTime : ${attendanceForm.minuteTimes}"
 											th:value="${minuteTime.key}" th:inline="text" class="form-control"
 											th:selected="${minuteTime.key == dailyAttendanceForm.trainingEndMinuteTime}">
@@ -168,37 +169,37 @@
 				}
 			});
 		</script>
-		
+
 		<!--定時機能 別所-Task.27-->
 		<script>
 			//画面全体のクリックを監視
-			document.addEventListener("click",(event)=>{
+			document.addEventListener("click", (event) => {
 				//クリックされたモノが定時ボタンかチェック 定時ボタンではなかったら終了
 				const regularTimeBtn = event.target.closest(".btn-success");
-				if(!regularTimeBtn) return;
-				
+				if (!regularTimeBtn) return;
+
 				//押された定時ボタンの列を取得
 				const row = event.target.closest("tr");
 				//万が一要素が取れなかったら終了
-				if(!row) return;
-				
+				if (!row) return;
+
 				//出勤時間、退勤時間のselect属性を取得
 				const startHour = row.querySelector("select[name$='trainingStartHourTime']");
 				const startMinute = row.querySelector("select[name$='trainingStartMinuteTime']");
 				const endHour = row.querySelector("select[name$='trainingEndHourTime']");
 				const endMinute = row.querySelector("select[name$='trainingEndMinuteTime']");
-				
+
 				//valueに定時を詰める if文はnull対策
-				if(startHour) startHour.value = "9";
-				if(startMinute) startMinute.value = "0";
-				if(endHour) endHour.value = "18";
-				if(endMinute) endMinute.value = "0";
-				
+				if (startHour) startHour.value = "9";
+				if (startMinute) startMinute.value = "0";
+				if (endHour) endHour.value = "18";
+				if (endMinute) endMinute.value = "0";
+
 				//値を変えたことをhtmlに通知
-				startHour?.dispatchEvent(new Event("change",{ bubbles : true }));
-				startMinute?.dispatchEvent(new Event("change",{ bubbles : true }));
-				endHour?.dispatchEvent(new Event("change",{ bubbles : true }));
-				endMinute?.dispatchEvent(new Event("change",{ bubbles : true }));
+				startHour?.dispatchEvent(new Event("change", {bubbles: true}));
+				startMinute?.dispatchEvent(new Event("change", {bubbles: true}));
+				endHour?.dispatchEvent(new Event("change", {bubbles: true}));
+				endMinute?.dispatchEvent(new Event("change", {bubbles: true}));
 			})
 		</script>
 </body>
