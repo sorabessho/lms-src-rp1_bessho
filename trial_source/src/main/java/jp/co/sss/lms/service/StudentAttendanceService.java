@@ -518,18 +518,18 @@ public class StudentAttendanceService {
 					result.rejectValue("attendanceList[" + index + "].trainingEndTime", null);
 					result.reject(Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE, new Object[] { index }, null);
 				}
-			}
-			//中抜け時間が勤務時間（出勤時間～退勤時間までの時間）を超える場合
-			if (dailyAttendanceForm.getBlankTime() != null
+				//中抜け時間が勤務時間（出勤時間～退勤時間までの時間）を超える場合
+			} else if (dailyAttendanceForm.getBlankTime() != null
 					&& !startTrainingTime.isBlank()
 					&& !endTrainingTime.isBlank()) {
-				TrainingTime totalTime = attendanceUtil.calcJukoTime(startTrainingTime, endTrainingTime);
+				TrainingTime totalTime = endTrainingTime.subtract(startTrainingTime);
 				TrainingTime blankTime = attendanceUtil.calcBlankTime(dailyAttendanceForm.getBlankTime());
 				if (totalTime.compareTo(blankTime) == -1) {
 					result.rejectValue("attendanceList[" + index + "].blankTime", null);
 					isBlankTime = true;
 				}
 			}
+
 			index++;
 		}
 		//エラーがあった所のみに一つだけグローバルエラーを設定
